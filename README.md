@@ -5,4 +5,11 @@
 > 
 > __git commit -m 'xxx'__
 >
-> __git push origin <branch name>__
+> __git push origin <branchName>__
+
+# Cancle stage modifed content
+> replace with remote branch 
+> __git reset HEAD__
+>
+> delete modifed content
+> __git rm --cached <file>__
