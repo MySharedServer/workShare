@@ -218,6 +218,7 @@ class SqlManager():
 
     def get_sql(self, type=CommonStr.DAY):
         sql = self.pulse_day_sql
+
         if type == CommonStr.DAY:
             sql = self.day_sql
         elif type == CommonStr.WEEK:
