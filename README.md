@@ -12,7 +12,6 @@
 > **git reset HEAD**
 >
 * delete modifed content
->
 > **git rm --cached _\<file1, file2, ...\>_**
 >
 > **git reset --mixed --soft --hard**    :*soft (commit) < mixed (commit + add) < hard (commit + add + local working)*
@@ -44,6 +43,7 @@
 > **git merge _\<branchName\>_**
 
 # Watch Log
+* show with graph
 > **git log --graph**
 >
 * filter from commit log
