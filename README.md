@@ -24,23 +24,23 @@
 > **git checkout HEAD _\<file1, file2, ...\>_**
 
 # Sync remote branch
-> **git fetch origin _\<branchName\>_**  > no merge remote
+> **git fetch origin _\<branchName\>_**  >> no merge remote
 >
-> **git pull origin _\<branchName\>_** > get remote branch and merge to local branch
+> **git pull origin _\<branchName\>_** >> get remote branch and merge to local branch
 
 # Compare different
 > **git diff**  > show diff between staged changes and local work
 >
-> **git diff --cached  > show diff of staged changes
+> **git diff --cached**  >> show diff of staged changes
 >
 > **git diff --left-right [branchA]...[branchB]**
 
 # Merge branch
-> **git merge _\<branchName\>_**  > merge \<branchName\> to current branch
+> **git merge _\<branchName\>_**  >> merge \<branchName\> to current branch
 
 # Watch Log
 > **git log --graph**
 >
-> **git log --grep=keywords**  > filter from commit log
+> **git log --grep=keywords**  >> filter from commit log
 >
-> **git log --author=[username]** > filter with username
+> **git log --author=[username]** >> filter with username
