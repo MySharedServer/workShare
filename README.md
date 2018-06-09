@@ -1,15 +1,17 @@
 # Submit Code
-> __git status__
+> **git status**
 >
-> __git add .__ or __git add <file1, file2>__
+> **git add .** or **git add <file1, file2>**
 > 
-> __git commit -m 'xxx'__
+> **git commit -m 'xxx'**
 >
-> __git push origin <branchName>__
+> **git push origin <branchName>**
 
 # Cancle stage modifed content
 > replace with remote branch 
-> __git reset HEAD__
+>
+> **git reset HEAD**
 >
 > delete modifed content
-> __git rm --cached <file>__
+>
+> **git rm --cached <file>**
