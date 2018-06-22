@@ -29,7 +29,7 @@ class SqlManager():
                     extract(day from to_timestamp(t1.timestamp)) as days, extract(hour from to_timestamp(t1.timestamp)) as hours,
                     trunc(extract(minute from to_timestamp(t1.timestamp))/5) as minutes_group,
                     case when t1.talk >= 4 and t1.talk <= 21 then 1 else 0 end as talk, t1.steps
-                FROM public.gateway_silmeew20data t1
+                FROM public.table_name t1
                 WHERE to_timestamp(timestamp) >= %s and to_timestamp(timestamp) < %s and user_id = 2
             ) t2
           GROUP BY t2.years,t2.months,t2.days,t2.hours,t2.minutes_group
@@ -82,11 +82,11 @@ class SqlManager():
 
     last_sql = """
         SELECT uv, hr, skin_temp/256.0 as skin_temp, talk 
-        FROM public.gateway_silmeew20data 
+        FROM public.table_name 
         WHERE timestamp 
         IN(
             SELECT max(timestamp) 
-            FROM public.gateway_silmeew20data 
+            FROM public.table_name 
             WHERE to_char(to_timestamp(timestamp), 'YYYY-MM-DD') = %s
         )
       """
@@ -105,10 +105,10 @@ class SqlManager():
                     FROM
                         (SELECT t2.sleep_state as sum_flag, t1.timestamp as group_flag, t2.timestamp, t2.motion_freq
                         FROM
-                            (SELECT * FROM public.gateway_silmeew20data 
+                            (SELECT * FROM public.table_name 
                              WHERE to_timestamp(timestamp - 60) >= %s and to_timestamp(timestamp) < %s and user_id = 2
                             ORDER BY timestamp ASC ) t1,
-                            (SELECT * FROM public.gateway_silmeew20data
+                            (SELECT * FROM public.table_name
                              WHERE to_timestamp(timestamp) >= %s and to_timestamp(timestamp) < %s and user_id = 2
                             ORDER BY timestamp ASC) t2
                         WHERE t1.sleep_state = 1 and (t2.timestamp >=t1.timestamp and t2.timestamp < t1.timestamp + 300)
@@ -131,10 +131,10 @@ class SqlManager():
                     FROM
                         (SELECT t2.act_type as sum_flag, t1.timestamp as group_flag, t2.timestamp, t2.motion_freq
                         FROM
-                            (SELECT * FROM public.gateway_silmeew20data 
+                            (SELECT * FROM public.table_name 
                              WHERE to_timestamp(timestamp - 60) >= %s and to_timestamp(timestamp) < %s and user_id = 2
                             ORDER BY timestamp ASC ) t1,
-                            (SELECT * FROM public.gateway_silmeew20data
+                            (SELECT * FROM public.table_name
                              WHERE to_timestamp(timestamp) >= %s and to_timestamp(timestamp) < %s and user_id = 2
                             ORDER BY timestamp ASC) t2
                         WHERE t1.sleep_state = 0 and t1.act_type != 0 and (t2.timestamp >=t1.timestamp and t2.timestamp < t1.timestamp + 300)
@@ -164,14 +164,14 @@ class SqlManager():
                             date_trunc('minute', to_timestamp(timestamp)) as input_time,
                             case when body_motion = 0 then 2 else 1 end as status,
                             row_number() over(ORDER BY timestamp) rid
-                    FROM public.gateway_silmeew20data
+                    FROM public.table_name
                     WHERE sleep_state = 1 and body_motion = 0 and to_timestamp(timestamp) >= %s and to_timestamp(timestamp) < %s and user_id = %s
                     ) t1,
                     (SELECT timestamp, body_motion,
                             to_timestamp(to_char(to_timestamp(timestamp), 'yyyy-mm-dd hh24:mi'), 'yyyy-mm-dd hh24:mi') as input_time,
                             case when body_motion = 0 then 2 else 1 end as status,
                             row_number() over(ORDER BY timestamp) rid
-                    FROM public.gateway_silmeew20data
+                    FROM public.table_name
                     WHERE sleep_state = 1 and body_motion = 0 and to_timestamp(timestamp) >= %s and to_timestamp(timestamp) < %s and user_id = %s
                     ) t2
                 WHERE (t2.rid-t1.rid)*60=extract(epoch from t2.input_time) - extract(epoch from t1.input_time) 
@@ -197,14 +197,14 @@ class SqlManager():
                             date_trunc('minute', to_timestamp(timestamp)) as input_time,
                             case when body_motion = 0 then 2 else 1 end as status,
                             row_number() over(ORDER BY timestamp) rid
-                    FROM public.gateway_silmeew20data
+                    FROM public.table_name
                     WHERE sleep_state = 1 and body_motion != 0 and to_timestamp(timestamp) >= %s and to_timestamp(timestamp) < %s and user_id = %s
                     ) t1,
                     (SELECT timestamp, body_motion,
                             to_timestamp(to_char(to_timestamp(timestamp), 'yyyy-mm-dd hh24:mi'), 'yyyy-mm-dd hh24:mi') as input_time,
                             case when body_motion = 0 then 2 else 1 end as status,
                             row_number() over(ORDER BY timestamp) rid
-                    FROM public.gateway_silmeew20data
+                    FROM public.table_name
                     WHERE sleep_state = 1 and body_motion != 0 and to_timestamp(timestamp) >= %s and to_timestamp(timestamp) < %s and user_id = %s
                     ) t2
                 WHERE (t2.rid-t1.rid)*60=extract(epoch from t2.input_time) - extract(epoch from t1.input_time) 
