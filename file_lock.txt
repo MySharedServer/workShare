@@ -1,0 +1,44 @@
+#!/bin/bash -e
+
+LOCK_FILE=/tmp/run_task.lock
+NOTIFY_LIMIT=600
+NOTIFY_ADDR=l.xp37@163.com
+MAIL=/usr/bin/mail
+DATE=/usr/bin/date
+RM=/usr/bin/rm
+
+# check the lock file
+if [ -s $LOCK_FILE ]; then
+    lock_time=`cat $LOCK_FILE`
+    unixtime_now=`$DATE +%s`
+    delta=$(($unixtime_now - $lock_time))
+    echo Lock File information $lock_time $unixtime_now $delta
+    if [ $delta -ge $NOTIFY_LIMIT ]; then
+        $MAIL -s "Database Synch Problem ?" $NOTIFY_ADDR <<ETX
+Cost much time, maybe something lock the file。
+
+Detail
+create time: $lock_time (Unix Time)
+confirm time: $unixtime_now
+pass time: $delta (秒)
+
+ETX
+
+    fi
+    exit 0
+fi
+
+### normal
+trap "$RM -f $LOCK_FILE" EXIT
+
+# create lock file
+$DATE +%s > $LOCK_FILE
+# check lock file
+echo Lock file `cat $LOCK_FILE`
+
+#linux python path
+source bin/activate
+# cd to project root path
+cd xx
+#run the custom command
+python manage.py customCmd
